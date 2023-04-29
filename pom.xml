@@ -16,7 +16,7 @@
 
 	<properties>
 		<java.version>11</java.version>
-		<docker.image.prefix>ostock</docker.image.prefix>
+		<docker.image.prefix>picher</docker.image.prefix>
 		<spring-cloud.version>Hoxton.SR1</spring-cloud.version>
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
 	</properties>
@@ -111,6 +111,14 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.cloud.tools/jib-maven-plugin -->
+		<dependency>
+			<groupId>com.google.cloud.tools</groupId>
+			<artifactId>jib-maven-plugin</artifactId>
+			<version>3.3.1</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>
@@ -162,31 +170,18 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-			<!-- This plugin is used to create a docker image and publish the image to docker hub-->
+			<!-- This plugin is used to create a docker image and publish the image to docker hub command: mvn compile jib:build  -->
 			<plugin>
-				<groupId>com.spotify</groupId>
-				<artifactId>dockerfile-maven-plugin</artifactId>
-				<version>1.4.13</version>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.3.1</version>
 				<configuration>
-					<repository>${docker.image.prefix}/${project.artifactId}</repository>
-					<tag>${project.version}</tag>
-					<buildArgs>
-						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-					</buildArgs>
+					<to>
+						<image>${docker.image.prefix}/${project.artifactId}</image>
+					</to>
 				</configuration>
-				<executions>
-					<execution>
-						<id>default</id>
-						<phase>install</phase>
-						<goals>
-							<goal>build</goal>
-							<goal>push</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
-
 
 </project>
